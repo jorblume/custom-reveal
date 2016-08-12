@@ -19,6 +19,7 @@
   background: #fff;
   border-radius: 50%;
   transition: 0.2s;
+  position: relative;
 }
 
 .tag-icon-wrapper.active {
@@ -26,17 +27,26 @@
 }
 
 .tag-content {
-  display: none;
+  display: inline-flex;
   align-items: center;
   background: #fff;
+  opacity: 0;
   border-radius: 4px;
   padding: 8px;
   margin-left: 8px;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
   flex-flow: row wrap;
+  z-index: 1;
+  visibility: hidden;
 }
 
 .tag-content.active {
-  display: inline-flex;
+  opacity: 1;
+  visibility: visible;
 }
 
 .tag-thumbnail,
@@ -66,6 +76,16 @@
 
 .tag-button-wrapper {
   margin-left: 10px;
+}
+
+.tag-icon {
+  width: 70%;
+  margin: 0 auto;
+  display: block;
+  vertical-align: baseline;
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
 }
 
 .tag-button {
@@ -104,9 +124,17 @@
   left: 50%;
 }
 
-/* DELETE */
+/* MAP STYLES */
 
 #map {
   height: 100px;
   flex-basis: 100%;
+}
+
+#map a {
+  display: none !important;
+}
+
+.gm-style .gm-style-cc a, .gm-style .gm-style-cc span {
+  display: none !important;
 }
