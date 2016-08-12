@@ -2,51 +2,62 @@ var travelReveal = window.travelReveal = {};
 
 travelReveal.data = [
   {
-    "class": 'first-tag',
+    "class": "first-tag",
     "iconUrl": "",
     "thumbnailUrl": "",
     "title": "Horse Ranch Mountain",
     "subtext": "Summit - 8,726ft",
     "cta": "Learn More",
-    "link": ""
+    "modal": "first"
   },
   {
-    "class": 'second-tag',
+    "class": "second-tag",
     "iconUrl": "",
     "thumbnailUrl": "",
     "title": "Springdate, Utah",
     "subtext": "Partly Sunny, 63°",
     "cta": "See Forecast",
-    "link": "",
+    "modal": "first"
   },
   {
-    "class": 'third-tag',
+    "class": "third-tag",
     "iconUrl": "",
     "thumbnailUrl": "",
     "title": "Zion National Park",
     "subtext": "nps.gov/zion",
     "cta": "Get Tickets",
-    "link": "",
+    "modal": "first"
   },
   {
-    "class": 'fourth-tag',
+    "class": "fourth-tag",
     "iconUrl": "",
     "thumbnailUrl": "",
     "title": "SF Baseball Cap",
     "subtext": "$49 | Habiliment",
     "cta": "Shop",
-    "link": "",
+    "modal": "first"
   },
   {
-    "class": 'fifth-tag',
+    "class": "fifth-tag",
     "iconUrl": "",
     "thumbnailUrl": "",
     "title": "Campus Backpack",
     "subtext": "$99 | Habiliment",
     "cta": "Shop",
-    "link": ""
+    "modal": "first"
   }
 ];
+
+travelReveal.modals = [
+  {
+    "attribute": 'data-modal-first',
+    "close": "close",
+    "title": "Shoppable content, right where your customers are.",
+    "content": "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+    "cta": "Learn more",
+    "link" : ""
+  }
+]
 
 travelReveal.createMarker = function(place) {
   var that = this;
@@ -82,8 +93,8 @@ travelReveal.formLocCall = function(endpoint, data, apiKey) {
 
 travelReveal.apiCalls = function() {
   var that = this;
-  var GEOIP_ENDPOINT = 'http://freegeoip.net/json/';
-  var WEATHER_ENDPOINT = 'http://api.openweathermap.org/data/2.5/weather';
+  var GEOIP_ENDPOINT = '//freegeoip.net/json/';
+  var WEATHER_ENDPOINT = '//api.openweathermap.org/data/2.5/weather';
   var GMAPS_API_KEY = 'AIzaSyCDuEW4yfbf4YrP3mrAGxJcvSuCHzQRiUE';
   var GMAPS_LOC_ENDPOINT = 'https://maps.googleapis.com/maps/api/geocode/json?';
   var GMAPS_LOCATION_KEY = 'AIzaSyDFooO1X9-FoPHqXuKiMgB6kae3YNHqJto';
@@ -153,7 +164,7 @@ travelReveal.apiCalls = function() {
 
 };
 
-travelReveal.appendHtml = function(tag) {
+travelReveal.appendTags = function(tag) {
   var html =
       '<div class="tag ' + tag.class + '">' +
       '<div class="tag-icon-wrapper">' +
@@ -166,7 +177,7 @@ travelReveal.appendHtml = function(tag) {
       '<p class="tag-subtext">' + tag.subtext + '</p>' +
       '</div>' +
       '<div class="tag-button-wrapper">' +
-      '<a class="tag-button" href="' + tag.link + '">' + tag.cta + '</a>' +
+      '<button class="tag-button" data-modal="' + tag.modal + '">' + tag.cta + '</button>' +
       '</div>' +
       '</div>' +
       '</div>';
@@ -183,6 +194,27 @@ travelReveal.appendHtml = function(tag) {
   });
 };
 
+travelReveal.appendModals = function(modal) {
+  var html =
+    '<div class="modal-overlay"' + modal.attribute + '>' +
+    '<div class="modal">' +
+    '<div class="modal-close">' + modal.close + '</div>' +
+    '<h3 class="modal-title">' + modal.title + '</h3>' +
+    '<p class="modal-content">' + modal.content + '</p>' +
+    '<a class="modal-button" href="' + modal.link + '">' + modal.cta + '</a>' +
+    '</div>'
+    '</div>'
+
+  this.$widget.append(html);
+  this.$widget.on('click', '.tag-button', function() {
+    var modalAttr = $(this).data('modal');
+    $('.modal-overlay[data-modal-' + modalAttr + ']').addClass('active');
+  });
+  this.$widget.on('click', '.modal-close', function() {
+    $(this).parents('.modal-overlay').removeClass('active');
+  });
+};
+
 
 $(window).load(function() {
   travelReveal.$widget = $('.curalate-widget-image');
@@ -191,7 +223,10 @@ $(window).load(function() {
   travelReveal.apiCalls();
 
   travelReveal.data.forEach(function(tag) {
-    travelReveal.appendHtml(tag);
+    travelReveal.appendTags(tag);
   });
 
+  travelReveal.modals.forEach(function(modal) {
+    travelReveal.appendModals(modal);
+  });
 });
