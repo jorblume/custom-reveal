@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+    <title>Curalate Reveal Preview</title>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="description" content="Curalate Reveal Preview"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta name="referrer" content="always"/>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-touch.min.js"></script>
+    <style type='text/css'>
+        /* <![CDATA[ */
+        body {
+            margin: 0;
+            padding: 6px 24px;
+            font-size: 13px;
+            letter-spacing: 0.1px;
+        }
+        div.curalate-widget-preview { padding: 34px; }
+        div.curalate-widget-preview-info { margin-bottom: 24px; }
+        div.curalate-widget-preview-info h2 {
+            color: #444;
+            font-weight: 200;
+            letter-spacing: 1.5px;
+        }
+        div.curalate-widget-preview-container {
+            border: solid 1px #eaeaea;
+            border-radius: 3px;
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        div.curalate-widget-preview-dimensions {
+            background-color: white;
+            bottom: 0;
+            font-weight: 400;
+            padding: 6px;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+        }
+        /* ]]> */
+    </style>
+<body>
+<div class="curalate-widget-preview-info">
+    <h2>Preview</h2>
+    <span>See what your Reveal will look like at different sizes by dragging the lower right hand corner of the preview window.</span>
+</div>
+<div class="curalate-widget-preview-container">
+    <div class="curalate-widget-preview">
+        <div class="curalate-widget" style="margin: 0 auto !important; position: relative !important; max-width: 1080px !important;" lang="en" data-widget-id="iH9dHqvFAnCg7Gh2dfKbdlqz2TQYoeMm" data-active-product-icon="tag" data-stretch-to-fit="false" data-shop-button-text="SHOP" data-auto-show-products="false" data-replace-tabs="false" data-custom-css-url-override="http://localhost:8080/css/custom-reveal.css" data-custom-js-url-override="http://localhost:8080/js/custom-reveal.js" data-widget-version="v1"><img class="curalate-widget-image" style="display: block; margin: auto; border-radius: 3px; max-width: 100% !important; width: auto !important;" src="https://d28m5bx785ox17.cloudfront.net/v1/img/zL77i-dROZHLOeRFIFRmALd3GOSC94kyIAK1SUWWEus=/d/l"/><script class="curalate-widget-script" async="" defer="" charset="utf-8" src="https://d30bopbxapq94k.cloudfront.net/js/curalate-widget-client-all.prod.min.js"></script></div>
+    </div>
+    <div class="curalate-widget-preview-dimensions"></div>
+</div>
+</body>
+<script src="/js/custom-reveal.js"></script>
+<link type="text/css" rel="stylesheet" href="/css/custom-reveal.css" />
+<script type='text/javascript'>
+    //<![CDATA[
+    (function() {
+        var previewContainer = angular.element('div.curalate-widget-preview-container'),
+                dimensionsContainer = angular.element('div.curalate-widget-preview-dimensions'),
+                previewPadding = 70,
+                updateDimensionsText = function() {
+                    dimensionsContainer.text((previewContainer.width() - previewPadding) + " x " + (previewContainer.height() - previewPadding))
+                },
+                autoUpdateDimensionsText = setInterval(updateDimensionsText, 10);
+
+        // Make the preview container resizable. When the preview container is resized, update the
+        // dimensions text and no longer automatically update the text every 10ms.
+        previewContainer.resizable({
+            resize: function(event, ui) {
+                window.dispatchEvent(new Event('resize')); // Trigger a fake resize event so that the widget resizes itself.
+                clearInterval(autoUpdateDimensionsText);
+                updateDimensionsText();
+            },
+            aspectRatio: true,
+            maxWidth: 1080,
+            minHeight: 240,
+            minWidth: 240
+        });
+
+    })();
+    //]]>
+</script>
+</head>
+</html>
