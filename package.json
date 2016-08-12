@@ -1,0 +1,35 @@
+{
+  "name": "custom-reveal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorblume/custom-reveal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jorblume/custom-reveal/issues"
+  },
+  "homepage": "https://github.com/jorblume/custom-reveal#readme",
+  "devDependencies": {
+    "autoprefixer": "^6.4.0",
+    "browserify": "^13.1.0",
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.1",
+    "gulp-postcss": "^6.1.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "jshint": "^2.9.2",
+    "postcss-reporter": "^1.4.1",
+    "postcss-scss": "^0.1.9",
+    "postcss-sorting": "^1.6.1",
+    "stylefmt": "^4.2.3",
+    "stylelint": "^7.1.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
