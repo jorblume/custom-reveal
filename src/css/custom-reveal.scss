@@ -1,8 +1,17 @@
 .tag {
   position: absolute;
-  z-index: 1;
   display: inline-flex;
   font-family: Helvetica, Arial, sans-serif;
+
+  &.modal-flyout {
+    .tag-icon-wrapper,
+    .tag-content {
+      z-index: 3;
+      visibility: visible;
+      opacity: 1;
+      transition: all 0s;
+    }
+  }
 }
 
 .tag * {
@@ -16,15 +25,26 @@
 
 .tag-icon-wrapper {
   position: relative;
-  width: 25px;
-  height: 25px;
+  z-index: 0;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: #fff;
   transition: 0.2s;
+
+  &.active {
+    transform: scale(1.3);
+  }
 }
 
-.tag-icon-wrapper.active {
-  transform: scale(1.3);
+.tag-icon-wrapper img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 70%;
 }
 
 .tag-content {
@@ -87,6 +107,7 @@
   text-transform: uppercase;
   font-weight: 300;
   font-size: 12px;
+  cursor: pointer;
 }
 
 /******** Specific Tag Locations *********/
@@ -107,7 +128,7 @@
 
 .tag.fourth-tag {
   top: 280px;
-  right: 40px;
+  right: 60px;
 }
 
 .tag.fifth-tag {
@@ -117,7 +138,9 @@
 
 /******** Modals ********/
 .modal-overlay {
-  position: fixed;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 2;
   display: none;
   align-items: center;
@@ -125,20 +148,61 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
+  font-family: Helvetica, Arial, sans-serif;
 
   &.active {
     display: flex;
   }
 }
 
+.modal-overlay {
+  &.data-modal-first {
+    .modal {
+      top: 240px;
+      left: 75px;
+    }
+  }
+
+  &.data-modal-second {
+    .modal {
+      top: 170px;
+      right: -9px;
+    }
+  }
+
+  &.data-modal-third {
+    .modal {
+      top: 250px;
+      left: 61px;
+    }
+  }
+
+  &.data-modal-fourth {
+    .modal {
+      top: 350px;
+      right: -5px;
+    }
+  }
+
+  &.data-modal-fifth {
+    .modal {
+      top: 445px;
+      right: 175px;
+    }
+  }
+}
+
 .modal {
-  max-width: 50%;
+  position: absolute;
+  max-width: 30%;
   color: #fff;
 }
 
 .modal-close {
+  text-decoration: none;
   text-transform: uppercase;
   font-size: 10px;
+  cursor: pointer;
 
   &::before {
     padding-right: 8px;
@@ -167,16 +231,15 @@
   border-radius: 4px;
   background: #ed6e22;
   color: #fff;
+  text-decoration: none;
   text-transform: uppercase;
 }
-
-
 
 /* MAP STYLES */
 
 #map {
   flex-basis: 100%;
-  height: 100px;
+  height: 150px;
 }
 
 #map a {

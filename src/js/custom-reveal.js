@@ -18,7 +18,7 @@ travelReveal.data = [
     "subtext": "Partly Sunny, 63°",
     "cta": "See Forecast",
     "link": "",
-    "modal": "first"
+    "modal": "second"
   },
   {
     "class": 'third-tag',
@@ -27,7 +27,7 @@ travelReveal.data = [
     "title": "Zion National Park",
     "subtext": "nps.gov/zion",
     "cta": "Get Tickets",
-    "modal": "first"
+    "modal": "third"
   },
   {
     "class": 'fourth-tag',
@@ -36,7 +36,7 @@ travelReveal.data = [
     "title": "SF Baseball Cap",
     "subtext": "$49 | Habiliment",
     "cta": "Shop",
-    "modal": "first"
+    "modal": "fourth"
   },
   {
     "class": 'fifth-tag',
@@ -45,7 +45,7 @@ travelReveal.data = [
     "title": "Campus Backpack",
     "subtext": "$99 | Habiliment",
     "cta": "Shop",
-    "modal": "first"
+    "modal": "fifth"
   }
 ];
 
@@ -56,7 +56,39 @@ travelReveal.modals = [
     "title": "Shoppable content, right where your customers are.",
     "content": "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
     "cta": "Learn more",
-    "link" : ""
+    "link" : "//curalate.com"
+  },
+  {
+    "attribute": 'data-modal-second',
+    "close": "close",
+    "title": "Shoppable content, right where your customers are.",
+    "content": "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+    "cta": "Learn more",
+    "link" : "//curalate.com"
+  },
+  {
+    "attribute": 'data-modal-third',
+    "close": "close",
+    "title": "Shoppable content, right where your customers are.",
+    "content": "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+    "cta": "Learn more",
+    "link" : "//curalate.com"
+  },
+  {
+    "attribute": 'data-modal-fourth',
+    "close": "close",
+    "title": "Shoppable content, right where your customers are.",
+    "content": "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+    "cta": "Learn more",
+    "link" : "//curalate.com"
+  },
+  {
+    "attribute": 'data-modal-fifth',
+    "close": "close",
+    "title": "Shoppable content, right where your customers are.",
+    "content": "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+    "cta": "Learn more",
+    "link" : "//curalate.com"
   }
 ];
 
@@ -104,6 +136,7 @@ travelReveal.apiCalls = function() {
       gmapsRequest = request.then(function(response) {
             that.lat = response.latitude;
             that.lon = response.longitude;
+            that.zip = response.zip_code;
             return $.getScript('https://maps.googleapis.com/maps/api/js?key=' + GMAPS_API_KEY + '&libraries=places');
           },
           locRequest = request.then(function(response) {
@@ -113,17 +146,18 @@ travelReveal.apiCalls = function() {
 
   gmapsRequest.done(function() {
     var $tag = $('.first-tag .tag-content');
-
     $tag.append('<div id="map"></div>');
-    var loc = new google.maps.LatLng(that.lat, that.lon);
-    that.infowindow = new google.maps.InfoWindow();
-
 
     $tag.find('.tag-title').text('Coffee Shops');
 
-    var zip = '';
+    if (that.zip !== '') {
+      $tag.find('.tag-subtext').text('Locations Near: ' + that.zip);
+    } else {
+      $tag.find('.tag-subtext').text('');
+    }
 
-    $tag.find('.tag-subtext').text('Locations Near:' + zip);
+    var loc = new google.maps.LatLng(that.lat, that.lon);
+    that.infowindow = new google.maps.InfoWindow();
 
     that.map = new google.maps.Map($('#map')[0], {
       center: loc,
@@ -200,37 +234,52 @@ travelReveal.appendTags = function(tag) {
 
 travelReveal.appendModals = function(modal) {
   var html =
-    '<div class="modal-overlay"' + modal.attribute + '>' +
+    '<div class="modal-overlay ' + modal.attribute + '"' + modal.attribute + '>' +
     '<div class="modal">' +
     '<div class="modal-close">' + modal.close + '</div>' +
     '<h3 class="modal-title">' + modal.title + '</h3>' +
     '<p class="modal-content">' + modal.content + '</p>' +
-    '<a class="modal-button" href="' + modal.link + '">' + modal.cta + '</a>' +
-    '</div>'
-    '</div>'
+    '<a class="modal-button" target="_blank" href="' + modal.link + '">' + modal.cta + '</a>' +
+    '</div>' +
+    '</div>';
 
   this.$widget.append(html);
+
   this.$widget.on('click', '.tag-button', function() {
-    var modalAttr = $(this).data('modal');
+    var $this = $(this);
+    var modalAttr = $this.data('modal');
+    $this.closest('.tag').addClass('modal-flyout');
     $('.modal-overlay[data-modal-' + modalAttr + ']').addClass('active');
   });
+
+
   this.$widget.on('click', '.modal-close', function() {
+    $('.modal-flyout').removeClass('modal-flyout');
     $(this).parents('.modal-overlay').removeClass('active');
   });
 };
 
 
 $(window).load(function() {
-  travelReveal.$widget = $('.curalate-widget-image');
+  travelReveal.$widget = $('body');
+
+  /*
+    This promise is to ensure the html is populated and ready before the api calls kick off
+    We don't want the gmaps data to return before the tags exist!
+  */
+
+  travelReveal.tagsPromise = function() {
+    var deferred = new $.Deferred();
+    travelReveal.data.forEach(function(tag) {
+      travelReveal.appendTags(tag);
+    });
+    travelReveal.modals.forEach(function(modal) {
+      travelReveal.appendModals(modal);
+    });
+    return deferred.promise();
+  };
 
   //start it up cap'n
-  travelReveal.apiCalls();
+  travelReveal.tagsPromise().then(travelReveal.apiCalls());
 
-  travelReveal.data.forEach(function(tag) {
-    travelReveal.appendTags(tag);
-  });
-
-  travelReveal.modals.forEach(function(modal) {
-    travelReveal.appendModals(modal);
-  });
 });
